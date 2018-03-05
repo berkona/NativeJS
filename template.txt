@@ -1,0 +1,23 @@
+
+//{TJS_INCLUDES}
+
+using namespace std;
+using namespace tjs;
+
+//{TJS_GENERATED_CODE}
+
+int main(int argc, const char** argv) {
+	try {
+		//cout << "calling __main__ manually" << endl;
+		Scope* window = new Window();
+		//cout << "created window at " << window << endl;
+		__main__(window);
+		//cout << "deleting window at " << window << endl;
+		delete window;
+		//cout << "done calling __main__" << endl;
+	} catch (std::exception& err) {
+		cerr << "Unexpected exception encountered: " << err.what() << endl;
+		return 1;
+	}
+	return 0;
+}

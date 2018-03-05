@@ -1,0 +1,21 @@
+<testsuites>
+	<testsuite name="Lexer" tests="8">
+		<testcase classname="Lexer" name="Lexer_emptyFile"/>
+		<testcase classname="Lexer" name="Lexer_singleTokens"/>
+		<testcase classname="Lexer" name="Lexer_complexTokens"/>
+		<testcase classname="Lexer" name="Lexer_keywords"/>
+		<testcase classname="Lexer" name="Lexer_ignoreComments"/>
+		<testcase classname="Lexer" name="Lexer_string"/>
+		<testcase classname="Lexer" name="Lexer_number"/>
+		<testcase classname="Lexer" name="Lexer_identifier"/>
+	</testsuite>
+	<testsuite name="Parser" tests="7">
+		<testcase classname="Parser" name="Parser_boolStmt"/>
+		<testcase classname="Parser" name="Parser_nullStmt"/>
+		<testcase classname="Parser" name="Parser_stringStmt"/>
+		<testcase classname="Parser" name="Parser_numberStmt"/>
+		<testcase classname="Parser" name="Parser_idStmt"/>
+		<testcase classname="Parser" name="Parser_groupingStmt"/>
+		<testcase classname="Parser" name="Parser_complexExpr"/>
+	</testsuite>
+</testsuites>

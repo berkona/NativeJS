@@ -13,15 +13,15 @@ double add(double a, double b) {
 	return a + b;
 }
 
-double add(JSObject a, JSObject b) {
+double add(JSObject& a, JSObject& b) {
 	return a.toNum() + b.toNum();
 }
 
-double add(JSObject a, double b) {
+double add(JSObject& a, double b) {
 	return a.toNum() + b;
 }
 
-double add(double b, JSObject a) {
+double add(double b, JSObject& a) {
 	return add(a, b);
 }
 
@@ -29,15 +29,15 @@ double sub(double a, double b) {
 	return a - b;
 }
 
-double sub(JSObject a, JSObject b) {
+double sub(JSObject& a, JSObject& b) {
 	return a.toNum() - b.toNum();
 }
 
-double sub(JSObject a, double b) {
+double sub(JSObject& a, double b) {
 	return a.toNum() - b;
 }
 
-double sub(double a, JSObject b) {
+double sub(double a, JSObject& b) {
 	return a - b.toNum();
 }
 
@@ -45,15 +45,15 @@ bool lt(double a, double b) {
 	return a < b;
 }
 
-bool lt(JSObject a, JSObject b) {
+bool lt(JSObject& a, JSObject& b) {
 	return a.toNum() < b.toNum();
 }
 
-bool lt(JSObject a, double b) {
+bool lt(JSObject& a, double b) {
 	return a.toNum() < b;
 }
 
-bool lt(double a, JSObject b) {
+bool lt(double a, JSObject& b) {
 	return a < b.toNum();
 }
 

@@ -40,10 +40,10 @@ public:
 	void visit(Expr::Literal& v) override;
 	void visit(Expr::Unary& v) override;
 	void visit(Expr::Set& v) override;
-//	void visit(Expr::Logical& v) override;
 	void visit(Expr::Variable& v) override;
 
 private:
+	std::unordered_map<std::string, int>* displacementMap = NULL;
 	std::unordered_map<Expr::Expr*, int>* scopeMap = NULL;
 	std::vector< std::unordered_map<std::string, bool>* > definedVars;
 

@@ -18,28 +18,23 @@
 namespace tjs {
 
 Scope::Scope(Scope* parent) : parent(parent) {
-	std::cout << "[Scope] Created scope " << this << " with parent " << parent << std::endl;
+//	std::cout << "[Scope] Created scope " << this << " with parent " << parent << std::endl;
 }
 
 Scope::~Scope() {
-	std::cout << "[~Scope] Deleting scope " << this << std::endl;
+//	std::cout << "[~Scope] Deleting scope " << this << std::endl;
 //	for (auto it = locals.begin(); it != locals.end(); ++it) {
 //		std::cout << "[~Scope] Deleting object " << it->second << std::endl;
 //		delete it->second;
 //	}
 }
 
-JSObject* Scope::get(std::string name) {
-	int depth = 0;
-	Scope curr = this;
-	auto search = curr.locals.find(name);
-	while (search == curr.locals.end()) {
-		depth++;
-		if (curr.parent == NULL)
-			throw std::runtime_error("[Scope] Variable does not exist in scope");
-		curr = *curr.parent;
-		search = curr.locals.find(name);
+JSObject* Scope::get(std::string name, int depth) {
+	Scope* curr = this;
+	for (int i = 0; i < depth; i++) {
+		curr = curr->parent;
 	}
+	auto search = curr->locals.find(name);
 	return search->second;
 }
 
@@ -140,7 +135,7 @@ Scope* Function::createScope(JSObject** args, int nArgs) {
 		newScope->set((*parameters)[i], args[i]);
 	}
 	// be true to JS behavior and allow for less args than parameters
-	for ( ; i < nArgs; i++) {
+	for ( ; i < parameters->size(); i++) {
 		newScope->set((*parameters)[i], undefined);
 	}
 	return newScope;

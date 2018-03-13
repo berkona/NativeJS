@@ -7,23 +7,39 @@
 
 #include "ObjectManager.h"
 
+using namespace std;
+
 namespace tjs {
 
-ObjectManager::ObjectManager() {
-	// TODO Auto-generated constructor stub
+ObjectManager::ObjectManager() {}
 
-}
-
-ObjectManager::~ObjectManager() {
-	// TODO Auto-generated destructor stub
-}
+ObjectManager::~ObjectManager() {}
 
 void ObjectManager::newScope(Scope* scope) {
-
+	scopes.push(ScopeData {
+		scope,
+		vector<JSObject*> {},
+	});
 }
 
 void ObjectManager::endScope() {
+	for (JSObject* obj : scopes.top().allocated) {
+		delete obj;
+	}
+}
 
+void ObjectManager::bubbleUp(JSObject* obj) {
+	auto itr = scopes.top().allocated.begin();
+	auto end = scopes.top().allocated.end();
+	for (; itr != end; ++itr) {
+		if ((*itr) == obj) {
+			scopes.top().allocated.erase(itr);
+			// TODO
+			return;
+		}
+	}
+
+	throw new runtime_error("Object not allocated in current scope");
 }
 
 } /* namespace tjs */

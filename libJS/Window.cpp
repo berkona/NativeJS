@@ -22,7 +22,7 @@ Window::~Window() {
 }
 
 static JSObject* log(Scope* scope) {
-	std::cout << scope->get("message")->toStr() << std::endl;
+	std::cout << scope->get("message", 0)->toStr() << std::endl;
 	return NULL;
 }
 

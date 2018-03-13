@@ -41,21 +41,28 @@ static string toObject(JSType t, string expr) {
 	}
 }
 
-static string toBool(JSType t, string expr) {
-	if (t == JSType::OBJECT
-		|| t == JSType::FUNCTION
-		|| t == JSType::NIL
-		|| t == JSType::UNDEFINED) {
-		return "(" + expr + ")->toBool()";
-	}
-	else if (t == JSType::STRING) {
-		return "(" + expr + ").size() > 0";
-	}
-	else if (t == JSType::NUMBER) {
-		 return "Num((" + expr + "), NULL).toBool()";
-	}
-	else {
+static string deref(JSType t, string expr) {
+	switch (t) {
+	case JSType::OBJECT:
+		return "*(" + expr + ")";
+	default:
 		return expr;
+	}
+}
+
+static string toBool(JSType t, string expr) {
+	switch (t) {
+		case JSType::OBJECT:
+		case JSType::FUNCTION:
+		case JSType::NIL:
+		case JSType::UNDEFINED:
+			return "(" + expr + ")->toBool()";
+		case JSType::STRING:
+			return "(" + expr + ").size() > 0";
+		case JSType::NUMBER:
+			return "Num((" + expr + "), NULL).toBool()";
+		default:
+			return expr;
 	}
 }
 
@@ -209,6 +216,7 @@ void CodeGenerator::visit(Stmt::Function &v) {
 		ident(ss, indentLevel);
 		ss << value;
 	}
+
 	// prevent a ud2 error, by forcing a return before end of body
 	ss << "return NULL;" << endl;
 	indentLevel--;
@@ -252,6 +260,7 @@ void CodeGenerator::visit(Expr::Binary &v) {
 
 	stringstream ss;
 	string leftCode;
+	JSType leftType = exprValue.type;
 	if (exprValue.var.size() > 0) {
 		ss << exprValue.code;
 		leftCode = exprValue.var;
@@ -261,6 +270,7 @@ void CodeGenerator::visit(Expr::Binary &v) {
 
 	v.right->accept(*this);
 	string rightCode;
+	JSType rightType = exprValue.type;
 	if (exprValue.var.size() > 0) {
 		ss << exprValue.code;
 		rightCode = exprValue.var;
@@ -335,7 +345,7 @@ void CodeGenerator::visit(Expr::Binary &v) {
 			throw CompileError("unsupported binary op", *v.op);
 	}
 
-	string expr = op + "((" + leftCode + "), (" + rightCode + "))";
+	string expr = op + "((" + deref(leftType, leftCode) + "), (" + deref(rightType, rightCode) + "))";
 
 	exprValue = {
 		expr,
@@ -464,9 +474,12 @@ void CodeGenerator::visit(Expr::Unary &v) {
 }
 
 void CodeGenerator::visit(Expr::Variable &v) {
+	int depth = (*modData.scopes)[&v];
+	stringstream ss;
+	ss << "scope->get(\"" << *v.name->lexeme << "\", " << depth << ")";
 	exprValue = {
 		"",
-		"scope->get(\"" + *v.name->lexeme + "\")",
+		ss.str(),
 		JSType::OBJECT,
 	};
 }

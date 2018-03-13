@@ -26,11 +26,22 @@ public:
 
 	void newScope(Scope* scope);
 	void endScope();
-	JSObject* alloc();
+
+	void bubbleUp(JSObject* obj);
+
+	JSObject* allocObj();
+	Function* allocFn();
+	Bool* allocBool();
+	Num* allocNum();
+	Str* allocStr();
 
 private:
 	std::stack<ScopeData> scopes;
-	std::vector<JSObject*> freeList;
+	std::vector<JSObject*> freeObj;
+	std::vector<Function*> freeFn;
+	std::vector<Bool*> freeBool;
+	std::vector<Num*> freeNum;
+	std::vector<Str*> freeStr;
 };
 
 } /* namespace tjs */

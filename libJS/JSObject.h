@@ -20,7 +20,7 @@ public:
 	Scope(Scope* parent);
 	virtual ~Scope();
 
-	JSObject* get(std::string name);
+	JSObject* get(std::string name, int depth);
 	void set(std::string name, JSObject* value);
 
 private:
